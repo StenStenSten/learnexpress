@@ -1,3 +1,10 @@
+import { fileURLToPath } from "url";
+import path from "path";
+
+// Fix for __dirname in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 import express from "express";
 import nunjucks from "nunjucks";
 import bodyParser from "body-parser";  
@@ -6,7 +13,7 @@ import postsRoutes from "./routes/posts.js";
 const app = express();
 
 // Configure Nunjucks
-nunjucks.configure("views", {
+nunjucks.configure(path.join(__dirname, "views"), {
     autoescape: true,
     express: app
 });

@@ -4,9 +4,17 @@ const router = Router();
 
 // Route to list all posts
 router.get("/", async (req, res) => {
-    const posts = await db.Post.findAll();  // Get all posts from DB
-    res.render("posts/index.njk", { posts });  // Render posts to the view
+    try {
+        const posts = await db.Post.findAll();
+        console.log("Fetched posts:", posts);  // Log fetched posts
+
+        res.render("index.njk", { posts });  // Pass posts to template
+    } catch (error) {
+        console.error("Error fetching posts:", error);
+        res.status(500).send("Internal Server Error");
+    }
 });
+
 
 // Route to show the form for creating a new post
 router.get("/create", (req, res) => {
