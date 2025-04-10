@@ -1,4 +1,11 @@
-run these commands
+LEARNEXPRESS PROJECT
+
+Made this for school.
+
+
+How to use it:
+
+run these commands in terminal
 
 npm install
 
