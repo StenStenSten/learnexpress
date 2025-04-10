@@ -1,6 +1,7 @@
 const path = require("path");
 const express = require("express");
 const nunjucks = require("nunjucks");
+const nunjucksDate = require("nunjucks-date"); // ✅ Add this
 const bodyParser = require("body-parser");
 const postsRoutes = require("./routes/posts.js");
 
@@ -8,7 +9,7 @@ const app = express();
 
 const db = require("./models");
 
-// Synchronize the database (this will create the Posts table if it doesn't exist)
+// Synchronize the database 
 db.sequelize.sync({ force: false })  // Set 'force: false' to avoid dropping tables on each restart
     .then(() => {
         console.log("Database synchronized!");
@@ -17,10 +18,15 @@ db.sequelize.sync({ force: false })  // Set 'force: false' to avoid dropping tab
         console.error("Error synchronizing database:", error);
     });
 
-nunjucks.configure(path.join(__dirname, "views"), {
+// Configure Nunjucks
+const env = nunjucks.configure(path.join(__dirname, "views"), {
     autoescape: true,
     express: app
 });
+
+// ✅ Register the date filter
+nunjucksDate.setDefaultFormat("YYYY-MM-DD");
+nunjucksDate.install(env);
 
 app.set("view engine", "njk");
 app.use(bodyParser.urlencoded({ extended: false }));

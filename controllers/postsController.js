@@ -80,6 +80,21 @@ async function deletePost(req, res) {
     }
 }
 
+// View single post
+async function viewPost(req, res) {
+    try {
+        const post = await db.Post.findByPk(req.params.id);
+        if (post) {
+            res.render("posts/answer.njk", { post });
+        } else {
+            res.status(404).send("Post not found");
+        }
+    } catch (error) {
+        console.error("Error fetching single post:", error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 module.exports = {
     listPosts,
     showCreateForm,
@@ -87,4 +102,5 @@ module.exports = {
     showEditForm,
     updatePost,
     deletePost,
+    viewPost,
 };
