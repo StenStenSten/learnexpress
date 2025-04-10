@@ -1,54 +1,38 @@
-import { Router } from "express";
-import db from "../models/index.js";  
-const router = Router();
+const express = require("express");
+const {
+    listPosts,
+    showCreateForm,
+    createPost,
+    showEditForm,
+    updatePost,
+    deletePost,
+    viewPost  
+} = require("../controllers/postsController.js");
 
-// Route to list all posts
-router.get("/", async (req, res) => {
-    try {
-        const posts = await db.Post.findAll();
-        console.log("Fetched posts:", posts);  // Log fetched posts
+const router = express.Router();
 
-        res.render("index.njk", { posts });  // Pass posts to template
-    } catch (error) {
-        console.error("Error fetching posts:", error);
-        res.status(500).send("Internal Server Error");
-    }
-});
+const asyncHandler = (fn) => (req, res, next) =>
+    Promise.resolve(fn(req, res, next)).catch(next);
 
+// List all posts
+router.get("/", asyncHandler(listPosts));
 
-// Route to show the form for creating a new post
-router.get("/create", (req, res) => {
-    res.render("posts/create.njk");  // Render the create post form
-});
+// Render create form
+router.get("/create", asyncHandler(showCreateForm));
 
-// Route to handle the creation of a new post
-router.post("/", async (req, res) => {
-    await db.Post.create({
-        title: req.body.title,
-        body: req.body.body,
-    });
-    res.redirect("/posts");  // Redirect to posts listing page
-});
+// Handle new post creation
+router.post("/", asyncHandler(createPost));
 
-// Route to show the edit form for a post
-router.get("/edit/:id", async (req, res) => {
-    const post = await db.Post.findByPk(req.params.id);  // Find post by ID
-    res.render("posts/edit.njk", { post });  // Render the edit post form with the current post data
-});
+// Render edit form
+router.get("/edit/:id", asyncHandler(showEditForm));
 
-// Route to handle updating a post
-router.post("/edit/:id", async (req, res) => {
-    await db.Post.update(
-        { title: req.body.title, body: req.body.body },
-        { where: { id: req.params.id } }  // Update the post by ID
-    );
-    res.redirect("/posts");  // Redirect to posts listing page
-});
+// Handle post update
+router.post("/edit/:id", asyncHandler(updatePost));
 
-// Route to delete a post
-router.get("/delete/:id", async (req, res) => {
-    await db.Post.destroy({ where: { id: req.params.id } });  // Delete the post by ID
-    res.redirect("/posts");  // Redirect to posts listing page
-});
+// Handle post deletion
+router.get("/delete/:id", asyncHandler(deletePost));
 
-export default router;
+// Display a single post
+router.get("/:id", asyncHandler(viewPost));  
+
+module.exports = router;

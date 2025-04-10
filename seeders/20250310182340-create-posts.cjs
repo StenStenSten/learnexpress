@@ -9,6 +9,7 @@ module.exports = {
       posts.push({
         title: faker.lorem.sentence(),
         body: faker.lorem.paragraphs(3),
+        author: faker.person.fullName(), // <-- Add this line
         createdAt: new Date(),
         updatedAt: new Date(),
       });

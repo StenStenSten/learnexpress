@@ -17,6 +17,11 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
+      author: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'Anonymous'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -27,6 +32,7 @@ module.exports = {
       }
     });
   },
+
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Posts');
   }

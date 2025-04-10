@@ -1,21 +1,23 @@
 {% extends "partials/layout.njk" %}
+
 {% block title %}Home{% endblock %}
+
 {% block content %}
-    <div class="row mb-2">
-{% if posts.length > 0 %}
-    {% for post in posts %}
+  <div class="row mb-2">
+    {% if posts.length > 0 %}
+      {% for post in posts %}
         <div class="col-3 mt-2">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">{{ post.title }}</h5>
-                    <p class="card-text">{{ post.body | slice(0, 100) }}...</p>
-                    <a href="#" class="btn btn-primary">GOOOOO</a>
-                </div>
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">{{ post.title }}</h5>
+              <p class="card-text">{{ post.body | slice(0, 100) }}...</p>
+              <a href="/posts/{{ post.id }}" class="btn btn-primary">Read More</a>
             </div>
+          </div>
         </div>
-    {% endfor %}
-{% else %}
-    <p>No posts found</p>
-{% endif %}
-    </div>
+      {% endfor %}
+    {% else %}
+      <p>No posts found</p>
+    {% endif %}
+  </div>
 {% endblock %}
